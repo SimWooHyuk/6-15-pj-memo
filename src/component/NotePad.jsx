@@ -1,37 +1,27 @@
-import React, { useState } from 'react';
-import { styled } from 'styled-components';
+import React, { useState, useEffect } from 'react';
 
-// const headCase = styled.div`
-// width: 400px;
-// padding: 10px;
-// border-radius: 5px solid #000;
-// `
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const Notepad = () => {
+const MemoCount = () => {
   const [notes, setNotes] = useState([]);
-  const [currentNote, setCurrentNote] = useState('');
+  const [newNote, setNewNote] = useState('');
+
+  useEffect(() => {
+    const storageNotes = localStorage.getItem('notes');
+    if (storageNotes) { 
+      setNotes(JSON.parse(storageNotes));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('notes', JSON.stringify(notes));
+  }, [notes]);
 
   const addNote = () => {
-    if (currentNote.trim() !== '') {
-      setNotes([...notes, { note: currentNote, time: new Date() }]);
-      setCurrentNote('');
+    const checkNote = newNote.trim();
+    if (checkNote !== '') {
+      setNotes([...notes, checkNote]);
+      setNewNote('');
+    } else {
+      alert('Alert');
     }
   };
 
@@ -43,21 +33,21 @@ const Notepad = () => {
 
   return (
     <div>
-      <h2>Notepad</h2>
+      <h2>메모장</h2>
       <div>
         <input
           type="text"
-          value={currentNote}
-          onChange={(e) => setCurrentNote(e.target.value)}
+          value={newNote}
+          onChange={(e) => setNewNote(e.target.value)}
         />
-        <button onClick={addNote}>Add Note</button>
+        <button onClick={addNote}>메모 추가하기ㅣ</button>
+        <p>메모 개수 :  {notes.length}</p>
       </div>
       <ul>
         {notes.map((note, index) => (
           <li key={index}>
-            {note.note} 
-            <span>{note.time.toLocaleDateString()}</span>
-            <button onClick={() => deleteNote(index)}>Delete</button>
+            {note}ㅤㅤㅤㅤㅤ[<span>{new Date().toLocaleDateString()}</span>]
+            <button onClick={() => deleteNote(index)}>메모 삭제하기</button>
           </li>
         ))}
       </ul>
@@ -65,4 +55,4 @@ const Notepad = () => {
   );
 };
 
-export default Notepad;
+export default MemoCount;
