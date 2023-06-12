@@ -6,7 +6,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>나의 메모장</h1>
+      {/* <h1>나의 메모장</h1> */}
       <MemoJang />
     </div>
   );

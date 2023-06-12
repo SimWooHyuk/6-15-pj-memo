@@ -1,4 +1,3 @@
-import { click } from '@testing-library/user-event/dist/click';
 import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import { v4 as uuidv4 } from 'uuid';
@@ -100,8 +99,9 @@ const MemoCount = () => {
     localStorage.setItem('notes', JSON.stringify(notes));
   }, [notes]);
 
-  const addNote = () => {
-    
+  const addNote = (e) => {
+    e.preventDefault(); // Prevent the form from submitting and refreshing the page
+
     const checkNote = newNote.trim();
     if (checkNote !== '') {
       setNotes([checkNote, ...notes]);
@@ -136,21 +136,21 @@ const MemoCount = () => {
   return (
     <NotePadWrapper>
       <h2>메모장</h2>
-      <div>
-        <input
-          className="input"
-          type="text"
-          value={newNote}
-          onChange={(e) => setNewNote(e.target.value)
-          
-          }
-        />
-        <button className="addButton" onClick={addNote}>
-          추가
-        </button>
-        <input type="text" value={search} placeholder='검색할 내용을 입력하세요' onChange={inputChange} /> 
-        <p>메모 개수: {notes.length}</p>
-      </div>
+      <form onSubmit={addNote}>
+        <div>
+          <input
+            className="input"
+            type="text"
+            value={newNote}
+            onChange={(e) => setNewNote(e.target.value)}
+          />
+          <button className="addButton" type="submit">
+            추가
+          </button>
+          <input type="text" value={search} placeholder='검색할 내용을 입력하세요' onChange={inputChange} /> 
+          <p>메모 개수: {notes.length}</p>
+        </div>
+      </form>
       <ul>
         {filteredNotes.map((note, index) => (
           <li key={uuidv4()} className="insert">
