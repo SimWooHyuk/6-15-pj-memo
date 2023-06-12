@@ -6,8 +6,9 @@ const NotePadWrapper = styled.div`
   width: 512px;
   margin: 0 auto;
   margin-top: 6rem;
-  border-radius: 5px;
-  border-color: #c93;
+  /* border-radius: 5px;
+  border-color: #c93; */
+  border: 1px solid red;
   height: auto;
 
   ul {
@@ -28,15 +29,19 @@ const NotePadWrapper = styled.div`
   }
 
   .input {
-    width: 512px;
+    width: 491px;
     height: 40px;
     padding: 10px;
     font-size: 24px;
+  border: 1px solid red;
+
   }
 
   .addButton {
     width: 76px;
     height: 30px;
+  border: 1px solid red;
+
   }
 
   .deleteButton {
@@ -45,7 +50,7 @@ const NotePadWrapper = styled.div`
   }
 
   .insert {
-    width: 512px;
+    width: 492px;
     height: auto;
     padding: 10px;
     
@@ -56,11 +61,12 @@ const NotePadWrapper = styled.div`
   }
 
   .date {
-    
+    white-space: nowrap;
   }
 
   .moveButton {
     width: 100px;
+    white-space: nowrap;
   }
   .button-container {
     display: flex; 
@@ -75,6 +81,18 @@ const NotePadWrapper = styled.div`
   .note-content {
     /* flex: 1; */
     width: 50%;
+  }
+  .searchBox {
+  border: 1px solid red;
+  height: 24px;
+  padding-top: 3px;
+  }
+  .searchBox::placeholder, input::placeholder {
+    font-weight: 900;
+    color: #000;
+  }
+  .head , input::placeholder {
+    text-align: center ;
   }
 `;
 
@@ -135,7 +153,7 @@ const MemoCount = () => {
   
   return (
     <NotePadWrapper>
-      <h2>메모장</h2>
+      <h2 className='head'>메모장</h2>
       <form onSubmit={addNote}>
         <div>
           <input
@@ -143,11 +161,12 @@ const MemoCount = () => {
             type="text"
             value={newNote}
             onChange={(e) => setNewNote(e.target.value)}
+            placeholder='추가할 메모를 작성해주세요'
           />
-          <button className="addButton" type="submit">
+          <button className="addButton"  type="submit">
             추가
           </button>
-          <input type="text" value={search} placeholder='검색할 내용을 입력하세요' onChange={inputChange} /> 
+          <input type="text" className='searchBox' value={search} placeholder='검색할 내용을 입력하세요' onChange={inputChange} /> 
           <p>메모 개수: {notes.length}</p>
         </div>
       </form>
