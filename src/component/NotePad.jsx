@@ -115,124 +115,146 @@ const NotePadWrapper = styled.div`
     background-repeat: no-repeat;
     background-size: cover;
   }
+  input.finishButton {
+    width: 20px;
+    height: 20px;
+
+  }
 `;
 document.body.style = 'background: beige ;';
 
-  const MemoCount = () => {
-    const [notes, setNotes] = useState([]);
-    const [newNote, setNewNote] = useState('');
-    const [search, setSearch] = useState('');
-    
-      useEffect(() => {
-        const storageNotes = localStorage.getItem('notes');
-        if (storageNotes) {
-          setNotes(JSON.parse(storageNotes));
-        }
-      }, []);
-      
-      useEffect(() => {
-        localStorage.setItem('notes', JSON.stringify(notes));
-      }, [notes]);
+const MemoCount = () => {
+  const [notes, setNotes] = useState([]);
+  const [newNote, setNewNote] = useState('');
+  const [search, setSearch] = useState('');
 
 
-    const inputChange = (e) => {
-      const { value } = e.target;
-      setSearch(value);
-    };
-
-    const addNote = (e) => {
-      e.preventDefault(); 
-      const checkNote = newNote.trim();
-      if (checkNote !== '') {
-        setNotes([checkNote, ...notes]);
-        setNewNote('');
-        
-      } else {
-        alert('내용을 입력해주세요.');
-      }
-    };
-
-    const deleteNote = (index) => {
-      const updatedNotes = [...notes];
-      updatedNotes.splice(index, 1);
-      setNotes(updatedNotes);
-    };
-
-    const moveNoteToTop = (index) => {
-      const updatedNotes = [...notes];
-      const [note] = updatedNotes.splice(index, 1);
-      updatedNotes.unshift(note);
-      setNotes(updatedNotes);
-    };
-
-    const moveNoteToDown = (index) => {
-      const updatedNotes = [...notes];
-      const [note] = updatedNotes.splice(index, 1);
-      updatedNotes.push(note);
-      setNotes(updatedNotes);
-    };
-
-    const filteredNotes = notes.filter((note) => note.includes(search));
-    
-    function orderMemoUp() {
-      let newMemo = [...notes].sort()
-      setNotes(newMemo)
+  useEffect(() => {
+    const storageNotes = localStorage.getItem('notes');
+    if (storageNotes) {
+      setNotes(JSON.parse(storageNotes));
     }
-    function orderMemoDown() {
-      let newMemo = [...notes].sort().reverse();
-      setNotes(newMemo)
-    }
+  }, []);
 
-    const deleteAllNotes = () => {
-      setNotes([]);
-    };
-    
-    
-    return (
-      <NotePadWrapper>
-        <div className='headImg'></div>
-        <div className='head'>메모장</div>
-        
-        <form onSubmit={addNote}>
-          <div>
-            <input
-              className="input"
-              type="text"
-              value={newNote}
-              onChange={(e) => setNewNote(e.target.value)}
-              placeholder='추가할 메모를 작성 후 엔터'
-            />
-            <button className="addButton"  type="submit">
-              추가
-            </button>
-            <input type="text" className='searchBox' value={search} placeholder='검색할 내용을 입력하세요' onChange={inputChange} />
-            <button type='button' className='padding4px' onClick={orderMemoUp}>이름↑</button> 
-            <button type='button' className='padding4px' onClick={orderMemoDown}>이름↓</button> 
-            <button type='button' className='padding4px' onClick={deleteAllNotes}>메모 전체 삭제</button>
-            <p>메모 {notes.length} 개</p>
-          </div>
-        </form>
-        <ul>
-          {filteredNotes.map((note, index) => (
-            <li key={uuidv4()} className="insert">
-              <div className="note-content">{note}</div>
-              <div className="button-container">
-                <button className="deleteButton" onClick={() => deleteNote(index)}>
-                  삭제
-                </button>
-                <button className="moveButton" onClick={() => moveNoteToTop(index)}>
-                  제일 위로
-                  <div className="date">[<span>{new Date().toLocaleDateString()}</span>]</div>
-                </button>
-                <button className="moveButton" onClick={() => moveNoteToDown(index)}>
-                  제일 아래로
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </NotePadWrapper>
-    );
+  useEffect(() => {
+    localStorage.setItem('notes', JSON.stringify(notes));
+  }, [notes]);
+
+  const inputChange = (e) => {
+    const { value } = e.target;
+    setSearch(value);
   };
 
-  export default React.memo(MemoCount);
+  const addNote = (e) => {
+    e.preventDefault();
+    const checkNote = newNote.trim();
+    if (checkNote !== '') {
+      setNotes([{ note: checkNote, finish: false }, ...notes]);
+      setNewNote('');
+    } else {
+      alert('내용을 입력해주세요.');
+    }
+  };
+
+  const deleteNote = (index) => {
+    const updatedNotes = [...notes];
+    updatedNotes.splice(index, 1);
+    setNotes(updatedNotes);
+  };
+
+  const moveNoteToTop = (index) => {
+    const updatedNotes = [...notes];
+    const [note] = updatedNotes.splice(index, 1);
+    updatedNotes.unshift(note);
+    setNotes(updatedNotes);
+  };
+
+  const moveNoteToDown = (index) => {
+    const updatedNotes = [...notes];
+    const [note] = updatedNotes.splice(index, 1);
+    updatedNotes.push(note);
+    setNotes(updatedNotes);
+  };
+
+  const filteredNotes = notes.filter((note) => note.note.includes(search));
+
+  function orderMemoUp() {
+    let newMemo = [...notes].sort()
+    setNotes(newMemo)
+  }
+
+  function orderMemoDown() {
+    let newMemo = [...notes].sort().reverse();
+    setNotes(newMemo)
+  }
+
+  const deleteAllNotes = () => {
+    setNotes([]);
+  };
+
+  const toggleFinish = (index) => {
+    const updatedNotes = [...notes];
+    updatedNotes[index].finish = !updatedNotes[index].finish;
+    setNotes(updatedNotes);
+  };
+
+  return (
+    <NotePadWrapper>
+      <div className='headImg'></div>
+      <div className='head'>메모장</div>
+
+      <form onSubmit={addNote}>
+        <div>
+          <input
+            className="input"
+            type="text"
+            value={newNote}
+            onChange={(e) => setNewNote(e.target.value)}
+            placeholder='추가할 메모를 작성 후 엔터'
+          />
+          <button className="addButton"  type="submit">
+            추가
+          </button>
+          <input type="text" className='searchBox' value={search} placeholder='검색할 내용을 입력하세요' onChange={inputChange} />
+          <button type='button' className='padding4px' onClick={orderMemoUp}>이름↑</button>
+          <button type='button' className='padding4px' onClick={orderMemoDown}>이름↓</button>
+          <button type='button' className='padding4px' onClick={deleteAllNotes}>메모 전체 삭제</button>
+          <p>메모 {notes.length} 개</p>
+        </div>
+      </form>
+      <ul>
+        {filteredNotes.map((note, index) => (
+          <li key={uuidv4()} className="insert">
+            <div className="note-content">
+              <label>
+              <input
+                type="checkbox"
+                className="finishButton"
+                checked={note.finish}
+                onChange={() => toggleFinish(index)}
+              />
+              <span className={note.finish ? 'clear' : '' }>
+                {note.finish ? '완료된 메모: '+ note.note : note.note}
+              </span>
+              </label>
+            </div>
+            <div className="button-container">
+              <button className="deleteButton" onClick={() => deleteNote(index)}>
+                삭제
+              </button>
+              <button className="moveButton" onClick={() => moveNoteToTop(index)}>
+                제일 위로
+                <div className="date">[<span>{new Date().toLocaleDateString()}</span>]</div>
+              </button>
+              <button className="moveButton" onClick={() => moveNoteToDown(index)}>
+                제일 아래로
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </NotePadWrapper>
+  );
+};
+
+export default React.memo(MemoCount);
