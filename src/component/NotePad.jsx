@@ -209,7 +209,7 @@ document.body.style = 'background: beige ;';
             <button type='button' className='padding4px' onClick={orderMemoUp}>이름↑</button> 
             <button type='button' className='padding4px' onClick={orderMemoDown}>이름↓</button> 
             <button type='button' className='padding4px' onClick={deleteAllNotes}>메모 전체 삭제</button>
-            <p> {notes.length} 개</p>
+            <p>메모 {notes.length} 개</p>
           </div>
         </form>
         <ul>
