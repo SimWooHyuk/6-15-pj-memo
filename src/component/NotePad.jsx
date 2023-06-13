@@ -212,7 +212,7 @@ const MemoCount = () => {
             onChange={(e) => setNewNote(e.target.value)}
             placeholder='추가할 메모를 작성 후 엔터'
           />
-          <button className="addButton"  type="submit">
+          <button className="addButton" type="submit">
             추가
           </button>
           <input type="text" className='searchBox' value={search} placeholder='검색할 내용을 입력하세요' onChange={inputChange} />
@@ -227,15 +227,15 @@ const MemoCount = () => {
           <li key={uuidv4()} className="insert">
             <div className="note-content">
               <label>
-              <input
-                type="checkbox"
-                className="finishButton"
-                checked={note.finish}
-                onChange={() => toggleFinish(index)}
-              />
-              <span className={note.finish ? 'clear' : '' }>
-                {note.finish ? '완료된 메모: '+ note.note : note.note}
-              </span>
+                <input
+                  type="checkbox"
+                  className="finishButton"
+                  checked={note.finish}
+                  onChange={() => toggleFinish(index)}
+                />
+                <span className={note.finish ? 'clear' : ''}>
+                  {note.finish ? '완료된 메모: ' + note.note : note.note}
+                </span>
               </label>
             </div>
             <div className="button-container">
