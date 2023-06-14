@@ -11,6 +11,7 @@ const NotePadWrapper = styled.div`
   border: 1px solid black;
   height: auto;
   background-color: #f5dcb7;
+  box-shadow: 5px 5px ;
   ul {
     list-style-type: none;
     padding: 0;
@@ -86,6 +87,7 @@ const NotePadWrapper = styled.div`
   border: 1px solid black;
   height: 24px;
   padding-top: 3px;
+  float: right;
   }
   .searchBox::placeholder, input::placeholder {
     font-weight: 600;
@@ -101,7 +103,8 @@ const NotePadWrapper = styled.div`
   .padding4px {
     padding: 5px;
   border: 1px solid black;
-
+    cursor: pointer;
+    margin-left: 15px;
   }
   body {
     background-color: yellow;
@@ -178,13 +181,30 @@ const MemoCount = () => {
 
   const filteredNotes = notes.filter((note) => note.note.includes(search));
 
+  // 공부할 내용 오름차순 , 내림차순 sort는 음수인지 양수인지 확인해서 대소비교해서 하기
+  // 이건 오름차순 작은거부터 큰거 순
   function orderMemoUp() {
-    let newMemo = [...notes].sort()
+    let newMemo = [...notes].sort(function (a,b) {
+      if (a.note < b.note) {
+        return -1; 
+      } else if (a.note > b.note) {
+        return 1;
+      }
+      return 0;
+    });
     setNotes(newMemo)
   }
 
+  // 이건 내림차순 큰거부터 작은거 순
   function orderMemoDown() {
-    let newMemo = [...notes].sort().reverse();
+    let newMemo = [...notes].sort(function (a,b) {
+      if (a.note < b.note) {
+        return 1; // 
+      } else if (a.note > b.note) {
+        return -1;
+      }
+      return 0;
+    });
     setNotes(newMemo)
   }
 
@@ -197,7 +217,9 @@ const MemoCount = () => {
     updatedNotes[index].finish = !updatedNotes[index].finish;
     setNotes(updatedNotes);
   };
-
+  console.log(orderMemoUp);
+  console.log(orderMemoDown);
+  console.log(notes);
   return (
     <NotePadWrapper>
       <div className='headImg'></div>
@@ -215,10 +237,10 @@ const MemoCount = () => {
           <button className="addButton" type="submit">
             추가
           </button>
-          <input type="text" className='searchBox' value={search} placeholder='검색할 내용을 입력하세요' onChange={inputChange} />
           <button type='button' className='padding4px' onClick={orderMemoUp}>이름↑</button>
           <button type='button' className='padding4px' onClick={orderMemoDown}>이름↓</button>
           <button type='button' className='padding4px' onClick={deleteAllNotes}>메모 전체 삭제</button>
+          <input type="text" className='searchBox' value={search} placeholder='검색할 내용을 입력하세요' onChange={inputChange} />
           <p>메모 {notes.length} 개</p>
         </div>
       </form>
