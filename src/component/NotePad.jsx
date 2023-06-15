@@ -8,10 +8,11 @@ const NotePadWrapper = styled.div`
   margin-top: 6rem;
   /* border-radius: 5px;
   border-color: #c93; */
-  border: 1px solid black;
+  border: 1px solid greenyellow;
   height: auto;
   background-color: #f5dcb7;
-  box-shadow: 5px 5px ;
+  /* background-image: url(); */
+  box-shadow: 5px 5px greenyellow;
   ul {
     list-style-type: none;
     padding: 0;
@@ -23,12 +24,13 @@ const NotePadWrapper = styled.div`
     height: 80px; 
     padding: 10px;
     font-size: 18px;
-    border-bottom: 5px solid black;
+    border-bottom: 5px solid greenyellow;
     display: flex;
     align-items: center;
     justify-content: space-between; 
   }
 
+  
   .input {
     width: 491px;
     height: 40px;
@@ -43,13 +45,26 @@ const NotePadWrapper = styled.div`
     height: 30px;
   border: 1px solid black;
     cursor: pointer;
+    background-color: skyblue;
   }
 
   .deleteButton {
     width: 100px;
-  
-  }
+    background-color: red;
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
 
+  }
+  .editButton {
+    font-size: 20px;
+    background-color: green;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+
+
+  }
   .insert {
     width: 492px;
     height: auto;
@@ -59,15 +74,19 @@ const NotePadWrapper = styled.div`
     align-items: center;
     overflow: auto;
     word-wrap: break-word;
+ 
   }
 
   .date {
     white-space: nowrap;
+    font-size: 15px;
   }
 
   .moveButton {
-    width: 100px;
-    white-space: nowrap;
+    width: 30px;
+    /* white-space: nowrap; */
+    cursor: pointer;
+
   }
   .button-container {
     display: flex; 
@@ -88,6 +107,7 @@ const NotePadWrapper = styled.div`
   height: 24px;
   padding-top: 3px;
   float: right;
+  width: 190px;
   }
   .searchBox::placeholder, input::placeholder {
     font-weight: 600;
@@ -105,9 +125,11 @@ const NotePadWrapper = styled.div`
   border: 1px solid black;
     cursor: pointer;
     margin-left: 15px;
+
   }
   body {
-    background-color: yellow;
+    background-image: url();
+    /* background-color: yellow; */
   }
   .headDiv {
     background-color: white;
@@ -123,14 +145,22 @@ const NotePadWrapper = styled.div`
     height: 20px;
 
   }
+  .deleteAll {
+    background-color: red;
+  background-repeat: no-repeat;
+    font-weight: 900;
+    cursor: pointer;
+  }
 `;
-document.body.style = 'background: beige ;';
+// document.body.style = 'background: beige ;';
+document.body.style = 'background-image: url(https://img.freepik.com/premium-photo/watercolor-old-gray-background-texture-neutral-monochrome-background_145343-139.jpg?w=1060)';
+
 
 const MemoCount = () => {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState('');
   const [search, setSearch] = useState('');
-
+  const [editIndex, setEditIndex] = useState(-1);
 
   useEffect(() => {
     const storageNotes = localStorage.getItem('notes');
@@ -149,13 +179,21 @@ const MemoCount = () => {
   };
 
   const addNote = (e) => {
+    // key=uuidv4()
     e.preventDefault();
     const checkNote = newNote.trim();
     if (checkNote !== '') {
-      setNotes([{ note: checkNote, finish: false }, ...notes]);
+      if (editIndex !== -1) {
+        const updatedNotes = [...notes];
+        updatedNotes[editIndex].note = checkNote;
+        setNotes(updatedNotes);
+        setEditIndex(-1);
+      } else {
+        setNotes([{ note: checkNote, finish: false , id:uuidv4()}, ...notes]);
+      }
       setNewNote('');
     } else {
-      alert('내용을 입력해주세요.');  
+      alert('내용을 입력해주세요.');
     }
   };
 
@@ -165,12 +203,11 @@ const MemoCount = () => {
     setNotes(updatedNotes);
   };
 
-  // const editNote = (index) => {
-  //   const updatedNotes = [...notes];
-  //   updatedNotes.(index);
-  //   setNotes(updatedNotes);
-  // };
-  // 수정 버튼을 누르면 수정 버튼을 누른 인덱스를 찾고 인덱스의 문자를 추출해서 input에 넣고 거기서 수정한것들을 수정 버튼을 누르면 다시 그 인덱스로 넣기
+  const editNote = (index) => {
+    setEditIndex(index);
+    setNewNote(notes[index].note);
+  };
+
   const moveNoteToTop = (index) => {
     const updatedNotes = [...notes];
     const [note] = updatedNotes.splice(index, 1);
@@ -187,31 +224,28 @@ const MemoCount = () => {
 
   const filteredNotes = notes.filter((note) => note.note.includes(search));
 
-  // 공부할 내용 오름차순 , 내림차순 sort는 음수인지 양수인지 확인해서 대소비교해서 하기
-  // 이건 오름차순 작은거부터 큰거 순
   function orderMemoUp() {
-    let newMemo = [...notes].sort(function (a,b) {
+    let newMemo = [...notes].sort(function (a, b) {
       if (a.note < b.note) {
-        return -1; 
+        return -1;
       } else if (a.note > b.note) {
         return 1;
       }
       return 0;
     });
-    setNotes(newMemo)
+    setNotes(newMemo);
   }
 
-  // 이건 내림차순 큰거부터 작은거 순
   function orderMemoDown() {
-    let newMemo = [...notes].sort(function (a,b) {
+    let newMemo = [...notes].sort(function (a, b) {
       if (a.note < b.note) {
-        return 1; // 
+        return 1;
       } else if (a.note > b.note) {
         return -1;
       }
       return 0;
     });
-    setNotes(newMemo)
+    setNotes(newMemo);
   }
 
   const deleteAllNotes = () => {
@@ -223,9 +257,10 @@ const MemoCount = () => {
     updatedNotes[index].finish = !updatedNotes[index].finish;
     setNotes(updatedNotes);
   };
-  console.log(orderMemoUp);
-  console.log(orderMemoDown);
-  console.log(notes);
+  // console.log(orderMemoUp);
+  // console.log(orderMemoDown);
+  // console.log(notes);
+  console.log(editIndex);
   return (
     <NotePadWrapper>
       <div className='headImg'></div>
@@ -243,16 +278,16 @@ const MemoCount = () => {
           <button className="addButton" type="submit">
             추가
           </button>
-          <button type='button' className='padding4px' onClick={orderMemoUp}>이름↑</button>
-          <button type='button' className='padding4px' onClick={orderMemoDown}>이름↓</button>
-          <button type='button' className='padding4px' onClick={deleteAllNotes}>메모 전체 삭제</button>
+          <button type='button' className='padding4px' disabled={editIndex !== -1} onClick={orderMemoUp}>이름↑</button>
+          <button type='button' className='padding4px' disabled={editIndex !== -1} onClick={orderMemoDown}>이름↓</button>
+          <button type='button' className='padding4px deleteAll' disabled={editIndex !== -1} onClick={deleteAllNotes}>메모 전체 삭제</button>
           <input type="text" className='searchBox' value={search} placeholder='검색할 내용을 입력하세요' onChange={inputChange} />
           <p>메모 {notes.length} 개</p>
         </div>
       </form>
       <ul>
         {filteredNotes.map((note, index) => (
-          <li key={uuidv4()} className="insert">
+          <li className="insert">
             <div className="note-content">
               <label>
                 <input
@@ -267,16 +302,16 @@ const MemoCount = () => {
               </label>
             </div>
             <div className="button-container">
+                  <div className="date">[<span>{new Date().toLocaleDateString()}</span>]</div>
+              <button className="moveButton" disabled={editIndex !== -1} onClick={() => moveNoteToTop(index)}>
+              ↑
+              </button>
+              <button className="moveButton" disabled={editIndex !== -1} onClick={() => moveNoteToDown(index)}>
+              ↓
+              </button>
               <button className='editButton' onClick={() => editNote(index)}> 수정</button>
-              <button className="deleteButton" onClick={() => deleteNote(index)}>
+              <button className="deleteButton" disabled={editIndex !== -1} onClick={() => deleteNote(index)}>
                 삭제
-              </button>
-              <button className="moveButton" onClick={() => moveNoteToTop(index)}>
-                제일 위로
-                <div className="date">[<span>{new Date().toLocaleDateString()}</span>]</div>
-              </button>
-              <button className="moveButton" onClick={() => moveNoteToDown(index)}>
-                제일 아래로
               </button>
             </div>
           </li>
