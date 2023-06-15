@@ -155,7 +155,7 @@ const MemoCount = () => {
       setNotes([{ note: checkNote, finish: false }, ...notes]);
       setNewNote('');
     } else {
-      alert('내용을 입력해주세요.');
+      alert('내용을 입력해주세요.');  
     }
   };
 
@@ -165,6 +165,12 @@ const MemoCount = () => {
     setNotes(updatedNotes);
   };
 
+  // const editNote = (index) => {
+  //   const updatedNotes = [...notes];
+  //   updatedNotes.(index);
+  //   setNotes(updatedNotes);
+  // };
+  // 수정 버튼을 누르면 수정 버튼을 누른 인덱스를 찾고 인덱스의 문자를 추출해서 input에 넣고 거기서 수정한것들을 수정 버튼을 누르면 다시 그 인덱스로 넣기
   const moveNoteToTop = (index) => {
     const updatedNotes = [...notes];
     const [note] = updatedNotes.splice(index, 1);
@@ -261,6 +267,7 @@ const MemoCount = () => {
               </label>
             </div>
             <div className="button-container">
+              <button className='editButton' onClick={() => editNote(index)}> 수정</button>
               <button className="deleteButton" onClick={() => deleteNote(index)}>
                 삭제
               </button>
