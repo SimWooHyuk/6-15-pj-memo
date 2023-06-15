@@ -8,11 +8,11 @@ const NotePadWrapper = styled.div`
   margin-top: 6rem;
   /* border-radius: 5px;
   border-color: #c93; */
-  border: 1px solid greenyellow;
+  border: 1px solid white;
   height: auto;
   background-color: #f5dcb7;
   /* background-image: url(); */
-  box-shadow: 5px 5px greenyellow;
+  box-shadow: 5px 5px ;
   ul {
     list-style-type: none;
     padding: 0;
@@ -24,7 +24,7 @@ const NotePadWrapper = styled.div`
     height: 80px; 
     padding: 10px;
     font-size: 18px;
-    border-bottom: 5px solid greenyellow;
+    border-bottom: 5px solid white;
     display: flex;
     align-items: center;
     justify-content: space-between; 
@@ -43,14 +43,15 @@ const NotePadWrapper = styled.div`
   .addButton {
     width: 76px;
     height: 30px;
-  border: 1px solid black;
+  border: 1px solid skyblue;
     cursor: pointer;
     background-color: skyblue;
   }
 
   .deleteButton {
-    width: 100px;
+    width: 52px;
     background-color: red;
+    border: red;
     font-weight: bold;
     font-size: 20px;
     cursor: pointer;
@@ -61,8 +62,8 @@ const NotePadWrapper = styled.div`
     background-color: green;
     font-weight: bold;
     color: white;
-    cursor: pointer;
-
+      cursor: pointer;
+      border: green;
 
   }
   .insert {
@@ -122,7 +123,7 @@ const NotePadWrapper = styled.div`
   }
   .padding4px {
     padding: 5px;
-  border: 1px solid black;
+  border: 2px solid black;
     cursor: pointer;
     margin-left: 15px;
 
@@ -150,6 +151,7 @@ const NotePadWrapper = styled.div`
   background-repeat: no-repeat;
     font-weight: 900;
     cursor: pointer;
+    border: red;
   }
 `;
 // document.body.style = 'background: beige ;';
