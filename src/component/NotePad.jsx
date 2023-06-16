@@ -278,12 +278,6 @@ const NotePad = () => {
     updatedNotes[index].finish = !updatedNotes[index].finish;
     setNotes(updatedNotes);
   };
-  // const checkFinish = () => {
-  //   const updatedNotes = [...notes];
-  //   if (updatedNotes.finish.length > 0) {
-  //     false
-  //   }
-  // }
   // console.log(orderMemoUp);
   // console.log(orderMemoDown);
   // console.log(notes);
