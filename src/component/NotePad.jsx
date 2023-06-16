@@ -1,7 +1,6 @@
 import React, { useState, useEffect, memo } from 'react';
 import styled from "styled-components";
 import { v4 as uuidv4 } from 'uuid';
-
 const NotePadWrapper = styled.div`
   width: 512px;
   margin: 0 auto;
@@ -18,7 +17,6 @@ const NotePadWrapper = styled.div`
     padding: 0;
     margin: 0;
   }
-
   li {
     width: 512px;
     height: 80px; 
@@ -29,7 +27,6 @@ const NotePadWrapper = styled.div`
     align-items: center;
     justify-content: space-between; 
   }
-
   
   .input {
     width: 491px;
@@ -37,9 +34,7 @@ const NotePadWrapper = styled.div`
     padding: 10px;
     font-size: 24px;
   border: 1px solid black;
-
   }
-
   .addButton {
     width: 76px;
     height: 30px;
@@ -47,7 +42,6 @@ const NotePadWrapper = styled.div`
     cursor: pointer;
     background-color: skyblue;
   }
-
   .deleteButton {
     width: 52px;
     background-color: red;
@@ -55,7 +49,6 @@ const NotePadWrapper = styled.div`
     font-weight: bold;
     font-size: 20px;
     cursor: pointer;
-
   }
   .editButton {
     font-size: 20px;
@@ -64,7 +57,6 @@ const NotePadWrapper = styled.div`
     color: white;
       cursor: pointer;
       border: green;
-
   }
   .insert {
     width: 492px;
@@ -77,23 +69,19 @@ const NotePadWrapper = styled.div`
     word-wrap: break-word;
  
   }
-
   .date {
     white-space: nowrap;
     font-size: 15px;
   }
-
   .moveButton {
     width: 30px;
     /* white-space: nowrap; */
     cursor: pointer;
-
   }
   .button-container {
     display: flex; 
     /* flex: 1; */
     width: 50%;
-
   }
   .clear {
     color: #666;
@@ -126,11 +114,7 @@ const NotePadWrapper = styled.div`
   border: 2px solid black;
     cursor: pointer;
     margin-left: 15px;
-
   }
-  body {
-    background-image: url();
-    /* background-color: yellow; */
   }
   .headDiv {
     background-color: white;
@@ -144,7 +128,6 @@ const NotePadWrapper = styled.div`
   input.finishButton {
     width: 20px;
     height: 20px;
-
   }
   .deleteAll {
     background-color: red;
@@ -159,7 +142,7 @@ const NotePadWrapper = styled.div`
     
   }
 `;
-// document.body.style = 'background: beige ;';
+
 document.body.style = 'background-image: url(https://img.freepik.com/premium-photo/watercolor-old-gray-background-texture-neutral-monochrome-background_145343-139.jpg?w=1060)';
 
 
@@ -168,8 +151,6 @@ const NotePad = () => {
   const [newNote, setNewNote] = useState('');
   const [search, setSearch] = useState('');
   const [editIndex, setEditIndex] = useState(-1);
-  const [checkedItems, setCheckedItems] = useState([]);
-  const [editButtonDisabled, setEditButtonDisabled] = useState(false);
 
   useEffect(() => {
     const storageNotes = localStorage.getItem('notes');
@@ -177,16 +158,13 @@ const NotePad = () => {
       setNotes(JSON.parse(storageNotes));
     }
   }, []);
-
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
   }, [notes]);
-
   const inputChange = (e) => {
     const { value } = e.target;
     setSearch(value);
   };
-
   const addNote = (e) => {
     e.preventDefault();
     const checkNote = newNote.trim();
@@ -204,9 +182,8 @@ const NotePad = () => {
       alert('내용을 입력해주세요.');
     }
   };
-
   const deleteNote = (index) => {
-    const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
+    const confirmDelete = window.confirm(' 정말로 삭제하시겠습니까? ');
     if (confirmDelete) {
       const updatedNotes = [...notes];
       updatedNotes.splice(index, 1);
@@ -217,33 +194,27 @@ const NotePad = () => {
   const editNote = (index) => {
     setEditIndex(index);
     setNewNote(notes[index].note);
-    setEditButtonDisabled(false);
   };
-
   const moveNoteToTop = (index) => {
     const updatedNotes = [...notes];
     const [note] = updatedNotes.splice(index, 1);
     updatedNotes.unshift(note);
     setNotes(updatedNotes);
   };
-
   const moveNoteToDown = (index) => {
     const updatedNotes = [...notes];
     const [note] = updatedNotes.splice(index, 1);
     updatedNotes.push(note);
     setNotes(updatedNotes);
   };
-
   const filteredNotes = notes.filter((note) => note.note.includes(search));
-
   const deleteFinishedNotes = () => {
-    const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
+    const confirmDelete = window.confirm(' 정말로 삭제하시겠습니까? ');
     if (confirmDelete) {
       const updatedNotes = notes.filter((note) => !note.finish);
       setNotes(updatedNotes);
     }
   };
-
   const orderMemoUp = () => {
     let newMemo = [...notes].sort(function (a, b) {
       if (a.note < b.note) {
@@ -267,37 +238,24 @@ const NotePad = () => {
     });
     setNotes(newMemo);
   };
-
   const deleteAllNotes = () => {
-    const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
+    const confirmDelete = window.confirm(' 정말로 삭제하시겠습니까? ');
     if (confirmDelete) {
       setNotes([]);
     }
   };
-
   const toggleFinish = (index) => {
     const updatedNotes = [...notes];
     updatedNotes[index].finish = !updatedNotes[index].finish;
     setNotes(updatedNotes);
-
-    const updatedCheckedItems = [...checkedItems];
-    if (updatedNotes[index].finish) {
-      updatedCheckedItems.push(index);
-    } else {
-      const itemIndex = updatedCheckedItems.indexOf(index);
-      if (itemIndex !== -1) {
-        updatedCheckedItems.splice(itemIndex, 1);
-      }
-    }
-    setCheckedItems(updatedCheckedItems);
   };
+
 
   console.log(editIndex);
   return (
     <NotePadWrapper>
       <div className='headImg'></div>
       <div className='head'>메모장</div>
-
       <form onSubmit={addNote}>
         <div>
           <input
@@ -314,12 +272,7 @@ const NotePad = () => {
           <button type='button' className='padding4px' disabled={editIndex !== -1} onClick={orderMemoDown}>이름↓</button>
           <button type='button' className='padding4px deleteAll' disabled={editIndex !== -1} onClick={deleteAllNotes}>메모 전체 삭제</button>
           <input type="text" className='searchBox' value={search} placeholder='검색할 내용을 입력하세요' onChange={inputChange} />
-          <button
-            type='button'
-            className="deleteFinishButton"
-            disabled={checkedItems.length === 0 || editButtonDisabled}
-            onClick={deleteFinishedNotes}
-          >
+          <button type='button' className="deleteFinishButton" disabled={editIndex !== -1} onClick={deleteFinishedNotes}>
             완료된 메모 삭제
           </button>
           <p>메모 {notes.length} 개</p>
@@ -343,35 +296,14 @@ const NotePad = () => {
             </div>
             <div className="button-container">
               <div className="date">[<span>{new Date().toLocaleDateString()}</span>]</div>
-              <button
-                className="moveButton"
-                disabled={editIndex !== -1}
-                onClick={() => moveNoteToTop(index)}
-              >
+              <button className="moveButton" disabled={editIndex !== -1} onClick={() => moveNoteToTop(index)}>
                 ↑
               </button>
-              <button
-                className="moveButton"
-                disabled={editIndex !== -1}
-                onClick={() => moveNoteToDown(index)}
-              >
+              <button className="moveButton" disabled={editIndex !== -1} onClick={() => moveNoteToDown(index)}>
                 ↓
               </button>
-              <button
-                className='editButton'
-                disabled={editButtonDisabled}
-                onClick={() => {
-                  editNote(index);
-                  setEditButtonDisabled(true);
-                }}
-              >
-                수정
-              </button>
-              <button
-                className="deleteButton"
-                disabled={editIndex !== -1}
-                onClick={() => deleteNote(index)}
-              >
+              <button className='editButton' onClick={() => editNote(index)}> 수정</button>
+              <button className="deleteButton" disabled={editIndex !== -1} onClick={() => deleteNote(index)}>
                 삭제
               </button>
             </div>
@@ -381,5 +313,6 @@ const NotePad = () => {
     </NotePadWrapper>
   );
 };
+
 
 export default React.memo(NotePad);
