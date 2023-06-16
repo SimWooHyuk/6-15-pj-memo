@@ -168,7 +168,6 @@ const MemoCount = () => {
   const [newNote, setNewNote] = useState('');
   const [search, setSearch] = useState('');
   const [editIndex, setEditIndex] = useState(-1);
-
   useEffect(() => {
     const storageNotes = localStorage.getItem('notes');
     if (storageNotes) {
@@ -205,10 +204,14 @@ const MemoCount = () => {
   };
 
   const deleteNote = (index) => {
-    const updatedNotes = [...notes];
-    updatedNotes.splice(index, 1);
-    setNotes(updatedNotes);
+    const confirmDelete = window.confirm(' 정말로 삭제하시겠습니까? ');
+    if (confirmDelete) {
+      const updatedNotes = [...notes];
+      updatedNotes.splice(index, 1);
+      setNotes(updatedNotes);
+    }
   };
+  
 
   const editNote = (index) => {
     setEditIndex(index);
@@ -232,8 +235,11 @@ const MemoCount = () => {
   const filteredNotes = notes.filter((note) => note.note.includes(search));
 
   const deleteFinishedNotes = () => {
-    const updatedNotes = notes.filter((note) => !note.finish);
-    setNotes(updatedNotes);
+    const confirmDelete = window.confirm(' 정말로 삭제하시겠습니까? ');
+    if (confirmDelete) {
+      const updatedNotes = notes.filter((note) => !note.finish);
+      setNotes(updatedNotes);
+    }
   };
   function orderMemoUp() {
     let newMemo = [...notes].sort(function (a, b) {
@@ -260,7 +266,11 @@ const MemoCount = () => {
   }
 
   const deleteAllNotes = () => {
-    setNotes([]);
+    const confirmDelete = window.confirm(' 정말로 삭제하시겠습니까? ');
+    if (confirmDelete) {
+      setNotes([]);
+      
+    }
   };
 
   const toggleFinish = (index) => {
@@ -268,6 +278,7 @@ const MemoCount = () => {
     updatedNotes[index].finish = !updatedNotes[index].finish;
     setNotes(updatedNotes);
   };
+
   // console.log(orderMemoUp);
   // console.log(orderMemoDown);
   // console.log(notes);
@@ -293,9 +304,9 @@ const MemoCount = () => {
           <button type='button' className='padding4px' disabled={editIndex !== -1} onClick={orderMemoDown}>이름↓</button>
           <button type='button' className='padding4px deleteAll' disabled={editIndex !== -1} onClick={deleteAllNotes}>메모 전체 삭제</button>
           <input type="text" className='searchBox' value={search} placeholder='검색할 내용을 입력하세요' onChange={inputChange} />
-          <button type='button'className="deleteFinishButton" disabled={editIndex !== -1} onClick={deleteFinishedNotes}>
-          완료된 메모 삭제
-            </button>
+          <button type='button' className="deleteFinishButton" disabled={editIndex !== -1} onClick={deleteFinishedNotes}>
+            완료된 메모 삭제
+          </button>
           <p>메모 {notes.length} 개</p>
         </div>
       </form>
