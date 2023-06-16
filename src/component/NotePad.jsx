@@ -155,6 +155,8 @@ const NotePadWrapper = styled.div`
   }
   .deleteFinishButton {
     width: 90px;
+    float: right;
+    
   }
 `;
 // document.body.style = 'background: beige ;';
