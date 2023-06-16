@@ -75,7 +75,7 @@ const NotePadWrapper = styled.div`
   }
   .moveButton {
     width: 30px;
-    /* white-space: nowrap; */
+ 
     cursor: pointer;
   }
   .button-container {
@@ -117,7 +117,7 @@ const NotePadWrapper = styled.div`
   }
   body {
     background-image: url();
-    /* background-color: yellow; */
+
   }
   .headDiv {
     background-color: white;
@@ -145,7 +145,7 @@ const NotePadWrapper = styled.div`
     
   }
 `;
-// document.body.style = 'background: beige ;';
+
 document.body.style = 'background-image: url(https://img.freepik.com/premium-photo/watercolor-old-gray-background-texture-neutral-monochrome-background_145343-139.jpg?w=1060)';
 
 
@@ -169,7 +169,7 @@ const NotePad = () => {
     setSearch(value);
   };
   const addNote = (e) => {
-    // key=uuidv4()
+
     e.preventDefault();
     const checkNote = newNote.trim();
     if (checkNote !== '') {
