@@ -153,6 +153,9 @@ const NotePadWrapper = styled.div`
     cursor: pointer;
     border: red;
   }
+  .deleteFinishButton {
+    width: 90px;
+  }
 `;
 // document.body.style = 'background: beige ;';
 document.body.style = 'background-image: url(https://img.freepik.com/premium-photo/watercolor-old-gray-background-texture-neutral-monochrome-background_145343-139.jpg?w=1060)';
@@ -226,6 +229,10 @@ const MemoCount = () => {
 
   const filteredNotes = notes.filter((note) => note.note.includes(search));
 
+  const deleteFinishedNotes = () => {
+    const updatedNotes = notes.filter((note) => !note.finish);
+    setNotes(updatedNotes);
+  };
   function orderMemoUp() {
     let newMemo = [...notes].sort(function (a, b) {
       if (a.note < b.note) {
@@ -284,6 +291,9 @@ const MemoCount = () => {
           <button type='button' className='padding4px' disabled={editIndex !== -1} onClick={orderMemoDown}>이름↓</button>
           <button type='button' className='padding4px deleteAll' disabled={editIndex !== -1} onClick={deleteAllNotes}>메모 전체 삭제</button>
           <input type="text" className='searchBox' value={search} placeholder='검색할 내용을 입력하세요' onChange={inputChange} />
+          <button type='button'className="deleteFinishButton" disabled={editIndex !== -1} onClick={deleteFinishedNotes}>
+          완료된 메모 삭제
+            </button>
           <p>메모 {notes.length} 개</p>
         </div>
       </form>
