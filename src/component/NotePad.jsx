@@ -191,7 +191,7 @@ const MemoCount = () => {
         setNotes(updatedNotes);
         setEditIndex(-1);
       } else {
-        setNotes([{ note: checkNote, finish: false , id:uuidv4()}, ...notes]);
+        setNotes([{ note: checkNote, finish: false, id: uuidv4() }, ...notes]);
       }
       setNewNote('');
     } else {
@@ -304,12 +304,12 @@ const MemoCount = () => {
               </label>
             </div>
             <div className="button-container">
-                  <div className="date">[<span>{new Date().toLocaleDateString()}</span>]</div>
+              <div className="date">[<span>{new Date().toLocaleDateString()}</span>]</div>
               <button className="moveButton" disabled={editIndex !== -1} onClick={() => moveNoteToTop(index)}>
-              ↑
+                ↑
               </button>
               <button className="moveButton" disabled={editIndex !== -1} onClick={() => moveNoteToDown(index)}>
-              ↓
+                ↓
               </button>
               <button className='editButton' onClick={() => editNote(index)}> 수정</button>
               <button className="deleteButton" disabled={editIndex !== -1} onClick={() => deleteNote(index)}>
