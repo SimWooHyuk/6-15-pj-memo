@@ -168,6 +168,9 @@ const NotePad = () => {
   const [newNote, setNewNote] = useState('');
   const [search, setSearch] = useState('');
   const [editIndex, setEditIndex] = useState(-1);
+  const [checkedItems, setCheckedItems] = useState([]);
+  const [editButtonDisabled, setEditButtonDisabled] = useState(false);
+
   useEffect(() => {
     const storageNotes = localStorage.getItem('notes');
     if (storageNotes) {
@@ -185,7 +188,6 @@ const NotePad = () => {
   };
 
   const addNote = (e) => {
-    // key=uuidv4()
     e.preventDefault();
     const checkNote = newNote.trim();
     if (checkNote !== '') {
@@ -204,18 +206,18 @@ const NotePad = () => {
   };
 
   const deleteNote = (index) => {
-    const confirmDelete = window.confirm(' 정말로 삭제하시겠습니까? ');
+    const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
     if (confirmDelete) {
       const updatedNotes = [...notes];
       updatedNotes.splice(index, 1);
       setNotes(updatedNotes);
     }
   };
-  
 
   const editNote = (index) => {
     setEditIndex(index);
     setNewNote(notes[index].note);
+    setEditButtonDisabled(false);
   };
 
   const moveNoteToTop = (index) => {
@@ -235,25 +237,26 @@ const NotePad = () => {
   const filteredNotes = notes.filter((note) => note.note.includes(search));
 
   const deleteFinishedNotes = () => {
-    const confirmDelete = window.confirm(' 정말로 삭제하시겠습니까? ');
+    const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
     if (confirmDelete) {
       const updatedNotes = notes.filter((note) => !note.finish);
       setNotes(updatedNotes);
     }
   };
-  function orderMemoUp() {
-    let newMemo = [...notes].sort(function (a, b) {
-      if (a.note < b.note) {
-        return -1;
-      } else if (a.note > b.note) {
-        return 1;
-      }
-      return 0;
-    });
-    setNotes(newMemo);
-  }
 
-  function orderMemoDown() {
+  const orderMemoUp = () => {
+    let newMemo = [...notes].sort(function (a, b) {
+      if (a.note < b.note) {
+        return -1;
+      } else if (a.note > b.note) {
+        return 1;
+      }
+      return 0;
+    });
+    setNotes(newMemo);
+  };
+
+  const orderMemoDown = () => {
     let newMemo = [...notes].sort(function (a, b) {
       if (a.note < b.note) {
         return 1;
@@ -263,13 +266,12 @@ const NotePad = () => {
       return 0;
     });
     setNotes(newMemo);
-  }
+  };
 
   const deleteAllNotes = () => {
-    const confirmDelete = window.confirm(' 정말로 삭제하시겠습니까? ');
+    const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
     if (confirmDelete) {
       setNotes([]);
-      
     }
   };
 
@@ -277,16 +279,19 @@ const NotePad = () => {
     const updatedNotes = [...notes];
     updatedNotes[index].finish = !updatedNotes[index].finish;
     setNotes(updatedNotes);
+
+    const updatedCheckedItems = [...checkedItems];
+    if (updatedNotes[index].finish) {
+      updatedCheckedItems.push(index);
+    } else {
+      const itemIndex = updatedCheckedItems.indexOf(index);
+      if (itemIndex !== -1) {
+        updatedCheckedItems.splice(itemIndex, 1);
+      }
+    }
+    setCheckedItems(updatedCheckedItems);
   };
-  // const checkFinish = () => {
-  //   const updatedNotes = [...notes];
-  //   if (updatedNotes.finish.length > 0) {
-  //     false
-  //   }
-  // }
-  // console.log(orderMemoUp);
-  // console.log(orderMemoDown);
-  // console.log(notes);
+
   console.log(editIndex);
   return (
     <NotePadWrapper>
@@ -309,7 +314,12 @@ const NotePad = () => {
           <button type='button' className='padding4px' disabled={editIndex !== -1} onClick={orderMemoDown}>이름↓</button>
           <button type='button' className='padding4px deleteAll' disabled={editIndex !== -1} onClick={deleteAllNotes}>메모 전체 삭제</button>
           <input type="text" className='searchBox' value={search} placeholder='검색할 내용을 입력하세요' onChange={inputChange} />
-          <button type='button' className="deleteFinishButton" disabled={editIndex !== -1} onClick={deleteFinishedNotes}>
+          <button
+            type='button'
+            className="deleteFinishButton"
+            disabled={checkedItems.length === 0 || editButtonDisabled}
+            onClick={deleteFinishedNotes}
+          >
             완료된 메모 삭제
           </button>
           <p>메모 {notes.length} 개</p>
@@ -333,14 +343,35 @@ const NotePad = () => {
             </div>
             <div className="button-container">
               <div className="date">[<span>{new Date().toLocaleDateString()}</span>]</div>
-              <button className="moveButton" disabled={editIndex !== -1} onClick={() => moveNoteToTop(index)}>
+              <button
+                className="moveButton"
+                disabled={editIndex !== -1}
+                onClick={() => moveNoteToTop(index)}
+              >
                 ↑
               </button>
-              <button className="moveButton" disabled={editIndex !== -1} onClick={() => moveNoteToDown(index)}>
+              <button
+                className="moveButton"
+                disabled={editIndex !== -1}
+                onClick={() => moveNoteToDown(index)}
+              >
                 ↓
               </button>
-              <button className='editButton' onClick={() => editNote(index)}> 수정</button>
-              <button className="deleteButton" disabled={editIndex !== -1} onClick={() => deleteNote(index)}>
+              <button
+                className='editButton'
+                disabled={editButtonDisabled}
+                onClick={() => {
+                  editNote(index);
+                  setEditButtonDisabled(true);
+                }}
+              >
+                수정
+              </button>
+              <button
+                className="deleteButton"
+                disabled={editIndex !== -1}
+                onClick={() => deleteNote(index)}
+              >
                 삭제
               </button>
             </div>
