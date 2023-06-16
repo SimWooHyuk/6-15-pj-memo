@@ -278,9 +278,7 @@ const NotePad = () => {
     updatedNotes[index].finish = !updatedNotes[index].finish;
     setNotes(updatedNotes);
   };
-  // console.log(orderMemoUp);
-  // console.log(orderMemoDown);
-  // console.log(notes);
+
   console.log(editIndex);
   return (
     <NotePadWrapper>
