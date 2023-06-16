@@ -1,7 +1,6 @@
 import React, { useState, useEffect, memo } from 'react';
 import styled from "styled-components";
 import { v4 as uuidv4 } from 'uuid';
-
 const NotePadWrapper = styled.div`
   width: 512px;
   margin: 0 auto;
@@ -18,7 +17,6 @@ const NotePadWrapper = styled.div`
     padding: 0;
     margin: 0;
   }
-
   li {
     width: 512px;
     height: 80px; 
@@ -29,7 +27,6 @@ const NotePadWrapper = styled.div`
     align-items: center;
     justify-content: space-between; 
   }
-
   
   .input {
     width: 491px;
@@ -37,9 +34,7 @@ const NotePadWrapper = styled.div`
     padding: 10px;
     font-size: 24px;
   border: 1px solid black;
-
   }
-
   .addButton {
     width: 76px;
     height: 30px;
@@ -47,7 +42,6 @@ const NotePadWrapper = styled.div`
     cursor: pointer;
     background-color: skyblue;
   }
-
   .deleteButton {
     width: 52px;
     background-color: red;
@@ -55,7 +49,6 @@ const NotePadWrapper = styled.div`
     font-weight: bold;
     font-size: 20px;
     cursor: pointer;
-
   }
   .editButton {
     font-size: 20px;
@@ -64,7 +57,6 @@ const NotePadWrapper = styled.div`
     color: white;
       cursor: pointer;
       border: green;
-
   }
   .insert {
     width: 492px;
@@ -77,23 +69,19 @@ const NotePadWrapper = styled.div`
     word-wrap: break-word;
  
   }
-
   .date {
     white-space: nowrap;
     font-size: 15px;
   }
-
   .moveButton {
     width: 30px;
     /* white-space: nowrap; */
     cursor: pointer;
-
   }
   .button-container {
     display: flex; 
     /* flex: 1; */
     width: 50%;
-
   }
   .clear {
     color: #666;
@@ -126,7 +114,6 @@ const NotePadWrapper = styled.div`
   border: 2px solid black;
     cursor: pointer;
     margin-left: 15px;
-
   }
   body {
     background-image: url();
@@ -144,7 +131,6 @@ const NotePadWrapper = styled.div`
   input.finishButton {
     width: 20px;
     height: 20px;
-
   }
   .deleteAll {
     background-color: red;
@@ -163,6 +149,7 @@ const NotePadWrapper = styled.div`
 document.body.style = 'background-image: url(https://img.freepik.com/premium-photo/watercolor-old-gray-background-texture-neutral-monochrome-background_145343-139.jpg?w=1060)';
 
 
+
 const NotePad = () => {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState('');
@@ -174,16 +161,13 @@ const NotePad = () => {
       setNotes(JSON.parse(storageNotes));
     }
   }, []);
-
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
   }, [notes]);
-
   const inputChange = (e) => {
     const { value } = e.target;
     setSearch(value);
   };
-
   const addNote = (e) => {
     // key=uuidv4()
     e.preventDefault();
@@ -202,7 +186,6 @@ const NotePad = () => {
       alert('내용을 입력해주세요.');
     }
   };
-
   const deleteNote = (index) => {
     const confirmDelete = window.confirm(' 정말로 삭제하시겠습니까? ');
     if (confirmDelete) {
@@ -212,28 +195,23 @@ const NotePad = () => {
     }
   };
   
-
   const editNote = (index) => {
     setEditIndex(index);
     setNewNote(notes[index].note);
   };
-
   const moveNoteToTop = (index) => {
     const updatedNotes = [...notes];
     const [note] = updatedNotes.splice(index, 1);
     updatedNotes.unshift(note);
     setNotes(updatedNotes);
   };
-
   const moveNoteToDown = (index) => {
     const updatedNotes = [...notes];
     const [note] = updatedNotes.splice(index, 1);
     updatedNotes.push(note);
     setNotes(updatedNotes);
   };
-
   const filteredNotes = notes.filter((note) => note.note.includes(search));
-
   const deleteFinishedNotes = () => {
     const confirmDelete = window.confirm(' 정말로 삭제하시겠습니까? ');
     if (confirmDelete) {
@@ -252,7 +230,6 @@ const NotePad = () => {
     });
     setNotes(newMemo);
   }
-
   function orderMemoDown() {
     let newMemo = [...notes].sort(function (a, b) {
       if (a.note < b.note) {
@@ -264,7 +241,6 @@ const NotePad = () => {
     });
     setNotes(newMemo);
   }
-
   const deleteAllNotes = () => {
     const confirmDelete = window.confirm(' 정말로 삭제하시겠습니까? ');
     if (confirmDelete) {
@@ -272,7 +248,6 @@ const NotePad = () => {
       
     }
   };
-
   const toggleFinish = (index) => {
     const updatedNotes = [...notes];
     updatedNotes[index].finish = !updatedNotes[index].finish;
@@ -284,7 +259,6 @@ const NotePad = () => {
     <NotePadWrapper>
       <div className='headImg'></div>
       <div className='head'>메모장</div>
-
       <form onSubmit={addNote}>
         <div>
           <input
@@ -342,5 +316,6 @@ const NotePad = () => {
     </NotePadWrapper>
   );
 };
+
 
 export default React.memo(NotePad);
