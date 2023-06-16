@@ -163,7 +163,7 @@ const NotePadWrapper = styled.div`
 document.body.style = 'background-image: url(https://img.freepik.com/premium-photo/watercolor-old-gray-background-texture-neutral-monochrome-background_145343-139.jpg?w=1060)';
 
 
-const MemoCount = () => {
+const NotePad = () => {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState('');
   const [search, setSearch] = useState('');
@@ -278,7 +278,12 @@ const MemoCount = () => {
     updatedNotes[index].finish = !updatedNotes[index].finish;
     setNotes(updatedNotes);
   };
-
+  // const checkFinish = () => {
+  //   const updatedNotes = [...notes];
+  //   if (updatedNotes.finish.length > 0) {
+  //     false
+  //   }
+  // }
   // console.log(orderMemoUp);
   // console.log(orderMemoDown);
   // console.log(notes);
@@ -346,4 +351,4 @@ const MemoCount = () => {
   );
 };
 
-export default React.memo(MemoCount);
+export default React.memo(NotePad);
